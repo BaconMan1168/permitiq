@@ -1,70 +1,103 @@
-# 02 — Frontend Design System
+---
+
+name: frontend-design
+description: Create distinctive, production-grade frontend UI while STRICTLY enforcing docs/DESIGN_SYSTEM.md. Creative direction allowed only within system constraints.
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+# FRONTEND DESIGN — PERMITIQ
+
+## Authority (Highest → Lowest)
+
+1. docs/DESIGN_SYSTEM.md (SOURCE OF TRUTH)
+2. Hard Constraints below
+3. Creative direction guidelines
+
+If conflict occurs → DESIGN SYSTEM WINS.
+
+---
+
+## Required Workflow (ALWAYS)
+
+### 1. Load Design System
+
+Read `docs/DESIGN_SYSTEM.md` fully.
+All tokens and rules are immutable.
+
+### 2. Choose Design Direction
+
+Pick ONE intentional aesthetic (calm productivity, editorial minimal, refined, industrial, etc.).
+Design must feel deliberate — never generic.
+
+### 3. Token Mapping (MANDATORY)
+
+Translate ALL design ideas into existing tokens BEFORE coding.
+
+Examples:
+
+* background → `bg-0`
+* card → `surface-0`
+* spacing → 8px scale only
+* animation → fast/normal/slow/page
+
+If a concept cannot use existing tokens:
+→ ASK for permission before changing system.
+
+### 4. Implementation
+
+Produce production-ready UI:
+
+* real code (HTML/CSS/React/etc.)
+* accessible defaults
+* loading + error states
+* reusable structure
+
+### 5. Compliance Pass (REQUIRED)
+
+Before responding, verify:
+
+* no hex/RGB/arbitrary values
+* only defined spacing/radii/shadows
+* modular typography only
+* accent ≤10% viewport
+* motion rules respected
+
+Auto-fix violations before output.
+
+---
 
 ## Hard Constraints (Never Violate)
 
-- [ ] Only defined colors — no hex, no arbitrary HSL
-- [ ] Only 8px spacing increments (8 16 24 32 40 48 56 64 80 96 120)
-- [ ] Only defined radii (xs=8 sm=12 md=16 lg=20 xl=24 pill=999)
-- [ ] Only modular type scale (xs=12 sm=14 base=16 md=20 lg=25 xl=31 2xl=39 3xl=49 4xl=61)
-- [ ] Only defined shadows (shadow-1 shadow-2 shadow-3)
-- [ ] Accent color ≤ 10% viewport usage
-- [ ] No new tokens without explicit approval
+* Tokens only — never invent values
+* 8px spacing system only
+* Defined radii/shadows only
+* Accent color used sparingly
+* Prefer monochrome structure
+* Gradients only with analogous colors
+* Do NOT modify tokens silently
 
-## Color Quick Reference
+---
 
-```
-bg-0  hsl(220,18%,8%)   — page bg
-bg-1  hsl(220,16%,11%)  — elevated bg
-surface-0 hsl(220,12%,16%) — cards
-accent-primary hsl(40,85%,58%) — CTA only
-success hsl(150,45%,48%)
-warning hsl(40,85%,58%)
-error   hsl(0,65%,55%)
-```
+## Governance Rule
 
-## Component Templates
+If a request conflicts with the design system:
+STOP and ask:
 
-### Button — Primary
-```
-bg: accent-primary | text: bg-0 | radius: pill
-padding: 16px 24px | shadow: shadow-1
-```
+“Approve design system change?”
 
-### Button — Secondary
-```
-bg: surface-1 | border: border-subtle | text: text-primary
-```
+Provide:
 
-### Card
-```
-bg: surface-0 | radius: radius-lg | padding: 24px | shadow: shadow-2
-hover → surface-1
-```
+* reason
+* affected tokens
+* visual impact
 
-### Glass Surface
-```
-bg: surface-0 | backdrop-blur: 20px
-border: 1px solid border-subtle | shadow: shadow-2
-```
+Wait for confirmation before proceeding.
 
-## Animation Rules
+---
 
-| Token | Value |
-|---|---|
-| fast | 120ms |
-| normal | 180ms |
-| slow | 280ms |
-| page | 420ms |
+## Creative Guidance
 
-- Scale max on hover: 1.02
-- translateY max: -2px
-- On press: scale 0.97–0.99
-- Forbidden: bounce, spring, rotation, flashing
+Designs must feel intentional and memorable.
+Avoid generic AI aesthetics, default layouts, or random styling.
+Elegance comes from restraint and consistency.
 
-## Definition of Done
-
-- [ ] No arbitrary color / spacing / radius / shadow values
-- [ ] Loading + error states present
-- [ ] Accessible defaults (aria, focus states)
-- [ ] Token-driven via CSS vars or Tailwind theme extensions
-- [ ] No design tokens modified without approval
+END SKILL
