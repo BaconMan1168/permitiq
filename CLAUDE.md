@@ -283,3 +283,9 @@ Claude must avoid:
 - adding dependencies without justification
 - inventing new design tokens or UI styles outside `docs/DESIGN_SYSTEM.md`
 
+## 15) Documentation Use
+
+- Always reference latest stable documentation.
+- Prefer official documentation over blogs.
+- Verify package versions before implementation.
+- Search documentation when unsure instead of guessing APIs.
