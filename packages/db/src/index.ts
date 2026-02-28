@@ -1,4 +1,17 @@
-// Database package — Prisma client + schema
-// Run `pnpm --filter @permitiq/db generate` after schema changes
+import { PrismaClient } from './generated/client'
 
-export {}
+// Singleton pattern: reuse across hot-reloads in development
+const globalForPrisma = globalThis as unknown as { prisma: PrismaClient | undefined }
+
+export const prisma =
+  globalForPrisma.prisma ??
+  new PrismaClient({
+    log: process.env.NODE_ENV === 'development' ? ['query', 'error', 'warn'] : ['error'],
+  })
+
+if (process.env.NODE_ENV !== 'production') {
+  globalForPrisma.prisma = prisma
+}
+
+// Re-export everything from the generated client (types, enums, etc.)
+export * from './generated/client'

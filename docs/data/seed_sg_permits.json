@@ -1,0 +1,6 @@
+{
+  "_comment": "Placeholder seed data for Singapore permits. Populate with real regulatory data from official sources before running `pnpm --filter @permitiq/db seed`.",
+  "jurisdictions": [],
+  "authorities": [],
+  "permits": []
+}

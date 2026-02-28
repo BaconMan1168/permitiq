@@ -1,12 +1,200 @@
 // Prisma schema — PermitIQ
-// Run: pnpm --filter @permitiq/db generate
-// Migrate: pnpm --filter @permitiq/db migrate:dev --name <description>
+// Generate client : pnpm --filter @permitiq/db generate
+// New migration   : pnpm --filter @permitiq/db migrate:dev --name <description>
+// Deploy migration: pnpm --filter @permitiq/db migrate:deploy
 
 generator client {
   provider = "prisma-client-js"
+  output   = "../src/generated/client"
 }
 
 datasource db {
-  provider = "postgresql"
-  url      = env("DATABASE_URL")
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Users
+// ---------------------------------------------------------------------------
+
+model UserProfile {
+  id         String     @id // Supabase auth UUID (no @default — set by auth layer)
+  createdAt  DateTime   @default(now()) @map("created_at")
+  updatedAt  DateTime   @updatedAt @map("updated_at")
+  businesses Business[]
+
+  @@map("user_profiles")
+}
+
+// ---------------------------------------------------------------------------
+// Businesses
+// ---------------------------------------------------------------------------
+
+model Business {
+  id              String           @id @default(cuid())
+  userId          String           @map("user_id")
+  user            UserProfile      @relation(fields: [userId], references: [id])
+  name            String
+  // Allowed: restaurant | retail | tuition_center | beauty_salon | home_food
+  type            String
+  location        String
+  metadata        Json             @default("{}")
+  createdAt       DateTime         @default(now()) @map("created_at")
+  updatedAt       DateTime         @updatedAt @map("updated_at")
+  businessPermits BusinessPermit[]
+
+  @@index([userId])
+  @@map("businesses")
+}
+
+// ---------------------------------------------------------------------------
+// Regulatory geography
+// ---------------------------------------------------------------------------
+
+model Jurisdiction {
+  id          String      @id @default(cuid())
+  country     String
+  city        String?
+  code        String      @unique // e.g. "SG"
+  authorities Authority[]
+  permits     Permit[]
+  createdAt   DateTime    @default(now()) @map("created_at")
+  updatedAt   DateTime    @updatedAt @map("updated_at")
+
+  @@map("jurisdictions")
+}
+
+model Authority {
+  id             String       @id @default(cuid())
+  name           String
+  shortName      String?      @map("short_name")
+  website        String?
+  jurisdictionId String       @map("jurisdiction_id")
+  jurisdiction   Jurisdiction @relation(fields: [jurisdictionId], references: [id])
+  permits        Permit[]
+  createdAt      DateTime     @default(now()) @map("created_at")
+  updatedAt      DateTime     @updatedAt @map("updated_at")
+
+  @@index([jurisdictionId])
+  @@map("authorities")
+}
+
+// ---------------------------------------------------------------------------
+// Permits
+// ---------------------------------------------------------------------------
+
+model Permit {
+  id               String                @id @default(cuid())
+  name             String
+  authorityId      String                @map("authority_id")
+  authority        Authority             @relation(fields: [authorityId], references: [id])
+  jurisdictionId   String                @map("jurisdiction_id")
+  jurisdiction     Jurisdiction          @relation(fields: [jurisdictionId], references: [id])
+  description      String?
+  cost             Decimal?
+  processingDays   Int?                  @map("processing_days")
+  // e.g. "yearly" | "2yr" | "none"
+  renewalFrequency String?               @map("renewal_frequency")
+  applicationUrl   String?               @map("application_url")
+  requiredDocs     String[]              @map("required_docs")
+  lastVerifiedAt   DateTime?             @map("last_verified_at")
+  createdAt        DateTime              @default(now()) @map("created_at")
+  updatedAt        DateTime              @updatedAt @map("updated_at")
+
+  rules           PermitRule[]
+  businessPermits BusinessPermit[]
+  // Edges where this permit is the prerequisite
+  dependsOn       PermitDependency[]    @relation("DependencySource")
+  // Edges where this permit requires something else
+  requiredBy      PermitDependency[]    @relation("DependencyTarget")
+  updateLogs      RegulatoryUpdateLog[]
+
+  @@index([authorityId])
+  @@index([jurisdictionId])
+  @@map("permits")
+}
+
+// ---------------------------------------------------------------------------
+// Rules (JSON-logic conditions)
+// ---------------------------------------------------------------------------
+
+model PermitRule {
+  id            String   @id @default(cuid())
+  permitId      String   @map("permit_id")
+  permit        Permit   @relation(fields: [permitId], references: [id])
+  // Vertical this rule applies to
+  businessType  String   @map("business_type")
+  // Structured JSON-logic condition evaluated against business profile
+  conditionJson Json     @map("condition_json")
+  createdAt     DateTime @default(now()) @map("created_at")
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@index([permitId])
+  @@index([businessType])
+  @@map("permit_rules")
+}
+
+// ---------------------------------------------------------------------------
+// Dependency graph
+// ---------------------------------------------------------------------------
+
+model PermitDependency {
+  id        String   @id @default(cuid())
+  // sourceId must be obtained before targetId
+  sourceId  String   @map("source_id")
+  source    Permit   @relation("DependencySource", fields: [sourceId], references: [id])
+  targetId  String   @map("target_id")
+  target    Permit   @relation("DependencyTarget", fields: [targetId], references: [id])
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@unique([sourceId, targetId])
+  @@index([sourceId])
+  @@index([targetId])
+  @@map("permit_dependencies")
+}
+
+// ---------------------------------------------------------------------------
+// Business permit tracking
+// ---------------------------------------------------------------------------
+
+enum BusinessPermitStatus {
+  NOT_STARTED
+  IN_PROGRESS
+  SUBMITTED
+  APPROVED
+}
+
+model BusinessPermit {
+  id             String               @id @default(cuid())
+  businessId     String               @map("business_id")
+  business       Business             @relation(fields: [businessId], references: [id])
+  permitId       String               @map("permit_id")
+  permit         Permit               @relation(fields: [permitId], references: [id])
+  status         BusinessPermitStatus @default(NOT_STARTED)
+  submissionDate DateTime?            @map("submission_date")
+  approvalDate   DateTime?            @map("approval_date")
+  expirationDate DateTime?            @map("expiration_date")
+  createdAt      DateTime             @default(now()) @map("created_at")
+  updatedAt      DateTime             @updatedAt @map("updated_at")
+
+  @@unique([businessId, permitId])
+  @@index([businessId])
+  @@map("business_permits")
+}
+
+// ---------------------------------------------------------------------------
+// Audit trail for regulatory changes
+// ---------------------------------------------------------------------------
+
+model RegulatoryUpdateLog {
+  id            String   @id @default(cuid())
+  permitId      String   @map("permit_id")
+  permit        Permit   @relation(fields: [permitId], references: [id])
+  changeSummary String   @map("change_summary")
+  updatedBy     String   @map("updated_by") // admin user id
+  createdAt     DateTime @default(now()) @map("created_at")
+
+  @@index([permitId])
+  @@map("regulatory_update_logs")
 }
