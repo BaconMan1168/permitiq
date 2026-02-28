@@ -1,0 +1,12 @@
+// Prisma schema — PermitIQ
+// Run: pnpm --filter @permitiq/db generate
+// Migrate: pnpm --filter @permitiq/db migrate:dev --name <description>
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}

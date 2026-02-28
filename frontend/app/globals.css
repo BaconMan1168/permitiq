@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Neutrals */
+  --bg-0: hsl(220, 18%, 8%);
+  --bg-1: hsl(220, 16%, 11%);
+  --bg-2: hsl(220, 14%, 14%);
+  --surface-0: hsl(220, 12%, 16%);
+  --surface-1: hsl(220, 12%, 19%);
+  --surface-2: hsl(220, 12%, 23%);
+  --border-subtle: hsl(220, 10%, 28%);
+  --border-strong: hsl(220, 12%, 38%);
+  --text-primary: hsl(220, 15%, 92%);
+  --text-secondary: hsl(220, 10%, 68%);
+  --text-tertiary: hsl(220, 8%, 48%);
+  --text-disabled: hsl(220, 6%, 32%);
+
+  /* Accent */
+  --accent-primary: hsl(40, 85%, 58%);
+  --accent-hover: hsl(40, 85%, 64%);
+  --accent-muted: hsl(40, 40%, 30%);
+
+  /* Analogous */
+  --analog-1: hsl(200, 55%, 55%);
+  --analog-2: hsl(220, 55%, 55%);
+  --analog-3: hsl(240, 55%, 60%);
+
+  /* Semantic */
+  --success: hsl(150, 45%, 48%);
+  --warning: hsl(40, 85%, 58%);
+  --error: hsl(0, 65%, 55%);
+  --info: var(--analog-2);
+
+  /* Radius */
+  --radius-xs: 8px;
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-xl: 24px;
+  --radius-pill: 999px;
+}
+
+body {
+  background-color: var(--bg-0);
+  color: var(--text-primary);
+  font-family: Inter, system-ui, sans-serif;
+}
