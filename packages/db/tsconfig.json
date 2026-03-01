@@ -1,11 +1,12 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "CommonJS",
-    "moduleResolution": "Node",
-    "lib": ["ES2022"],
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "target": "ES2023",
+    "lib": ["ES2023"],
     "types": ["node"]
   },
-  "include": ["src/**/*", "prisma/**/*.ts"],
+  "include": ["src/**/*", "prisma/**/*.ts", "prisma.config.ts"],
   "exclude": ["node_modules"]
 }

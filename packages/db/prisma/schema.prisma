@@ -2,16 +2,16 @@
 // Generate client : pnpm --filter @permitiq/db generate
 // New migration   : pnpm --filter @permitiq/db migrate:dev --name <description>
 // Deploy migration: pnpm --filter @permitiq/db migrate:deploy
+// All CLI config is in packages/db/prisma.config.ts
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "prisma-client"
   output   = "../src/generated/client"
 }
 
 datasource db {
-  provider  = "postgresql"
-  url       = env("DATABASE_URL")
-  directUrl = env("DIRECT_DATABASE_URL")
+  // Connection URL is supplied via prisma.config.ts — do not add url here
+  provider = "postgresql"
 }
 
 // ---------------------------------------------------------------------------

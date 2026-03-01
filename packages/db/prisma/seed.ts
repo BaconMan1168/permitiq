@@ -1,18 +1,24 @@
-import { PrismaClient } from '../src/generated/client'
-import { readFileSync, existsSync } from 'fs'
-import { join } from 'path'
+import 'dotenv/config'
+import { PrismaClient } from '../src/generated/client/client.js'
+import { PrismaPg } from '@prisma/adapter-pg'
+import { readFileSync, existsSync } from 'node:fs'
 
-const prisma = new PrismaClient()
+const adapter = new PrismaPg({
+  connectionString: process.env.DATABASE_URL!,
+})
+
+const prisma = new PrismaClient({ adapter })
 
 async function main() {
-  const seedPath = join(__dirname, '../../../docs/data/seed_sg_permits.json')
+  // Resolve seed file path relative to this script (ESM-safe)
+  const seedUrl = new URL('../../../docs/data/seed_sg_permits.json', import.meta.url)
 
-  if (!existsSync(seedPath)) {
-    console.log(`Seed file not found at ${seedPath} — skipping.`)
+  if (!existsSync(seedUrl)) {
+    console.log(`Seed file not found at ${seedUrl.pathname} — skipping.`)
     return
   }
 
-  const raw = readFileSync(seedPath, 'utf-8')
+  const raw = readFileSync(seedUrl, 'utf-8')
   const data = JSON.parse(raw) as {
     jurisdictions: unknown[]
     authorities: unknown[]
