@@ -291,7 +291,7 @@ Structured tables:
 **Backend:**  
 - Express.js  
 - REST API  
-- Prisma ORM  
+- Prisma ORM (must use v.7+)
 
 **Database:**  
 - PostgreSQL (Supabase managed)  

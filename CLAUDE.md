@@ -13,6 +13,7 @@ This file defines the operating rules for Claude Code in this repository to prod
 - Do not refactor unrelated code.
 - Follow folder boundaries strictly.
 - Run checks before every commit.
+- Never say "co authored by claude" in any commit messages
 
 ---
 
@@ -289,3 +290,4 @@ Claude must avoid:
 - Prefer official documentation over blogs.
 - Verify package versions before implementation.
 - Search documentation when unsure instead of guessing APIs.
+
