@@ -2,6 +2,7 @@
   "name": "@permitiq/db",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "scripts": {
@@ -15,11 +16,15 @@
     "test": "echo ok"
   },
   "dependencies": {
-    "@prisma/client": "^6.0.0"
+    "@prisma/adapter-pg": "^7.0.0",
+    "@prisma/client": "^7.0.0",
+    "dotenv": "^16.0.0",
+    "pg": "^8.0.0"
   },
   "devDependencies": {
     "@types/node": "^22.0.0",
-    "prisma": "^6.0.0",
+    "@types/pg": "^8.0.0",
+    "prisma": "^7.0.0",
     "tsx": "^4.0.0",
     "typescript": "^5.0.0"
   }
