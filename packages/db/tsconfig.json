@@ -2,7 +2,9 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "module": "CommonJS",
-    "moduleResolution": "Node"
+    "moduleResolution": "Node",
+    "lib": ["ES2022"],
+    "types": ["node"]
   },
   "include": ["src/**/*", "prisma/**/*.ts"],
   "exclude": ["node_modules"]

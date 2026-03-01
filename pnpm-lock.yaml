@@ -17,6 +17,9 @@ importers:
 
   backend:
     dependencies:
+      '@permitiq/db':
+        specifier: workspace:*
+        version: link:../packages/db
       express:
         specifier: ^4.21.0
         version: 4.22.1
@@ -119,6 +122,9 @@ importers:
         specifier: ^6.0.0
         version: 6.19.2(prisma@6.19.2(typescript@5.9.3))(typescript@5.9.3)
     devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.19.13
       prisma:
         specifier: ^6.0.0
         version: 6.19.2(typescript@5.9.3)
