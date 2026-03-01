@@ -49,9 +49,11 @@ if (!business) return res.status(404).json({ error: { code: 'NOT_FOUND', message
 ## `.env.example` Template
 
 ```
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key
-SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+SUPABASE_URL=https://[project-ref].supabase.co
+
+SUPABASE_PUBLISHABLE_KEY=your-publishable-key
+
+SUPABASE_SECRET_KEY=your-secret-key
 ```
 
 ## Definition of Done
