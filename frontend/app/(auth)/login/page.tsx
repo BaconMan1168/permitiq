@@ -86,7 +86,7 @@ export default function LoginPage() {
               required
               disabled={loading}
               placeholder="you@example.com"
-              className="px-4 py-3 rounded-[12px] text-sm outline-none"
+              className="px-4 py-3 rounded-[12px] text-sm outline-hidden"
               style={{
                 backgroundColor: 'var(--surface-1)',
                 border: '1px solid var(--border-subtle)',
@@ -106,7 +106,7 @@ export default function LoginPage() {
               required
               disabled={loading}
               placeholder="••••••••"
-              className="px-4 py-3 rounded-[12px] text-sm outline-none"
+              className="px-4 py-3 rounded-[12px] text-sm outline-hidden"
               style={{
                 backgroundColor: 'var(--surface-1)',
                 border: '1px solid var(--border-subtle)',

@@ -9,7 +9,7 @@
     "test": "pnpm -r test"
   },
   "devDependencies": {
-    "concurrently": "^9.0.0",
-    "prettier": "^3.4.0"
+    "concurrently": "^9.2.1",
+    "prettier": "^3.8.1"
   }
 }
